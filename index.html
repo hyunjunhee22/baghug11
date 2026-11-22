@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Baghug — Hands-Free Luggage Storage in Myeongdong</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- QRCode.js Library for real scannable QR code generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <!-- Google Fonts: Plus Jakarta Sans, Inter & Noto Sans KR/JP/SC -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=Noto+Sans+KR:wght@400;500;700&family=Noto+Sans+SC:wght@400;500;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'Inter', '"Noto Sans KR"', '"Noto Sans JP"', '"Noto Sans SC"', 'sans-serif'],
+                    },
+                    colors: {
+                        line4: {
+                            DEFAULT: '#00A5DE',
+                            dark: '#0284C7',
+                            light: '#E0F4FC',
+                            soft: '#F0F9FF',
+                        }
+                    },
+                    boxShadow: {
+                        'sky': '0 12px 26px -8px rgba(0, 165, 222, 0.32)',
+                        'card': '0 20px 50px -20px rgba(15, 23, 42, 0.08)',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-6px); }
+        }
+        @keyframes waveHand {
+            0%, 100% { transform: rotate(0deg); }
+            25% { transform: rotate(-14deg); }
+            75% { transform: rotate(10deg); }
+        }
+        .mascot-float {
+            animation: floatSlow 3.8s ease-in-out infinite;
+        }
+        .mascot-wave {
+            transform-origin: 68px 116px;
+            animation: waveHand 2.4s ease-in-out infinite;
+        }
+    </style>
+</head>
+<body class="bg-slate-50/70 sm:bg-slate-100/70 text-gray-900 antialiased selection:bg-line4-light selection:text-line4-dark">
+
+    <!-- Mobile-First Clean Single Screen Container -->
+    <div class="max-w-md mx-auto min-h-screen bg-white sm:shadow-card flex flex-col justify-between relative overflow-hidden">
+
+        <!-- TOP VISUAL AREA: Soft Sky-Tinted Backdrop + Baghug Mascot -->
+        <div class="relative bg-gradient-to-b from-[#E5F6FD] via-[#F2FAFE] to-white pt-5 pb-4 px-5">
+            <!-- Top Language Switcher -->
+            <div class="flex items-center justify-between relative z-10">
+                <div class="inline-flex items-center gap-1.5 bg-white/85 backdrop-blur-sm border border-sky-100 px-2.5 py-1 rounded-full text-[11px] font-bold text-line4-dark">
+                    <span class="w-4 h-4 rounded-full bg-line4 text-white text-[10px] flex items-center justify-center">4</span>
+                    <span>Myeongdong</span>
+                </div>
+
+                <div class="flex items-center bg-white/85 backdrop-blur-sm p-0.5 rounded-full border border-sky-100 text-[11px] font-semibold" role="group" aria-label="Language selector">
+                    <button onclick="setLang('en')" id="lang-en" class="lang-btn px-2 py-1 rounded-full transition-all bg-line4 text-white shadow-sm">EN</button>
+                    <button onclick="setLang('jp')" id="lang-jp" class="lang-btn px-2 py-1 rounded-full transition-all text-gray-500 hover:text-gray-900">日本語</button>
+                    <button onclick="setLang('cn')" id="lang-cn" class="lang-btn px-2 py-1 rounded-full transition-all text-gray-500 hover:text-gray-900">中文</button>
+                    <button onclick="setLang('kr')" id="lang-kr" class="lang-btn px-2 py-1 rounded-full transition-all text-gray-500 hover:text-gray-900">한국어</button>
+                </div>
+            </div>
+
+            <!-- Cute Minimalist 3D-Style Soft Vector Mascot Illustration -->
+            <div class="mt-3 flex flex-col items-center justify-center">
+                <svg class="w-60 h-56 sm:w-64 sm:h-60 mascot-float" viewBox="0 0 260 230" fill="none" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Baghug friendly mascot waving while hugging a suitcase">
+                    <defs>
+                        <radialGradient id="bodyGrad" cx="38%" cy="30%" r="70%">
+                            <stop offset="0%" stop-color="#56CCF2"/>
+                            <stop offset="55%" stop-color="#00A5DE"/>
+                            <stop offset="100%" stop-color="#0284C7"/>
+                        </radialGradient>
+                        <radialGradient id="pedestalTop" cx="50%" cy="40%" r="60%">
+                            <stop offset="0%" stop-color="#FFFFFF"/>
+                            <stop offset="100%" stop-color="#DCEFF8"/>
+                        </radialGradient>
+                        <linearGradient id="bagGrad" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0%" stop-color="#FDE68A"/>
+                            <stop offset="100%" stop-color="#F59E0B"/>
+                        </linearGradient>
+                        <filter id="softShadow" x="-15%" y="-15%" width="130%" height="130%">
+                            <feDropShadow dx="0" dy="8" stdDeviation="8" flood-color="#0284C7" flood-opacity="0.14"/>
+                        </filter>
+                    </defs>
+
+                    <!-- Subtle decorative sky clouds/sparkles -->
+                    <circle cx="44" cy="54" r="6" fill="#BAE6FD" opacity="0.7"/>
+                    <circle cx="218" cy="64" r="8" fill="#BAE6FD" opacity="0.6"/>
+                    <circle cx="206" cy="42" r="3.5" fill="#7DD3FC"/>
+
+                    <!-- Soft Isometric Pedestal Platform (matching reference composition) -->
+                    <g filter="url(#softShadow)">
+                        <path d="M130 152 L212 182 L130 212 L48 182 Z" fill="#C7E6F5"/>
+                        <path d="M48 182 L130 212 L130 220 L48 190 Z" fill="#B2DCF0"/>
+                        <path d="M212 182 L130 212 L130 220 L212 190 Z" fill="#99CEE8"/>
+                        <path d="M130 146 L212 176 L130 206 L48 176 Z" fill="url(#pedestalTop)"/>
+                    </g>
+
+                    <!-- Ground contact shadow -->
+                    <ellipse cx="130" cy="176" rx="44" ry="12" fill="#0284C7" opacity="0.12"/>
+
+                    <!-- Cute Chubby Feet -->
+                    <rect x="103" y="156" width="20" height="20" rx="10" fill="#0284C7"/>
+                    <rect x="135" y="156" width="20" height="20" rx="10" fill="#0284C7"/>
+
+                    <!-- Waving Left Arm -->
+                    <g class="mascot-wave">
+                        <rect x="44" y="88" width="26" height="42" rx="13" transform="rotate(-28 57 109)" fill="url(#bodyGrad)"/>
+                        <!-- Friendly little palm -->
+                        <circle cx="46" cy="88" r="10" fill="#FFE4D6"/>
+                    </g>
+
+                    <!-- Main Rounded Mascot Body -->
+                    <rect x="78" y="54" width="104" height="114" rx="52" fill="url(#bodyGrad)"/>
+                    <!-- Soft belly highlight -->
+                    <ellipse cx="116" cy="82" rx="22" ry="12" transform="rotate(-20 116 82)" fill="#FFFFFF" opacity="0.22"/>
+
+                    <!-- Cute Suitcase/Tag Ear Antenna -->
+                    <path d="M122 55 V43 C122 39 125 36 129 36 H133 C137 36 140 39 140 43 V55" stroke="#0284C7" stroke-width="5.5" stroke-linecap="round"/>
+
+                    <!-- Cozy Face Window -->
+                    <rect x="96" y="74" width="68" height="44" rx="22" fill="#FFF5EE"/>
+                    <!-- Rosy Cheeks -->
+                    <ellipse cx="109" cy="102" rx="6" ry="3.5" fill="#FDA4AF" opacity="0.65"/>
+                    <ellipse cx="151" cy="102" rx="6" ry="3.5" fill="#FDA4AF" opacity="0.65"/>
+                    <!-- Happy Eyes -->
+                    <circle cx="116" cy="94" r="4.2" fill="#1E293B"/>
+                    <circle cx="117.3" cy="92.6" r="1.4" fill="#FFFFFF"/>
+                    <circle cx="144" cy="94" r="4.2" fill="#1E293B"/>
+                    <circle cx="145.3" cy="92.6" r="1.4" fill="#FFFFFF"/>
+                    <!-- Warm Smile -->
+                    <path d="M125 101 Q130 106 135 101" stroke="#1E293B" stroke-width="2.6" stroke-linecap="round"/>
+
+                    <!-- Cute Mini Suitcase Being Hugged -->
+                    <g transform="translate(122, 118)">
+                        <path d="M14 6 V2 C14 0.5 15.5 -1 17 -1 H25 C26.5 -1 28 0.5 28 2 V6" stroke="#B45309" stroke-width="3" stroke-linecap="round"/>
+                        <rect x="4" y="6" width="34" height="28" rx="8" fill="url(#bagGrad)"/>
+                        <line x1="14" y1="6" x2="14" y2="34" stroke="#FEF3C7" stroke-width="2.2"/>
+                        <line x1="28" y1="6" x2="28" y2="34" stroke="#FEF3C7" stroke-width="2.2"/>
+                    </g>
+
+                    <!-- Hugging Right Arm Wrapping Around the Bag -->
+                    <path d="M174 114 C186 122 182 142 158 142" stroke="#38BDF8" stroke-width="17" stroke-linecap="round"/>
+                    <circle cx="154" cy="142" r="8.5" fill="#FFE4D6"/>
+                </svg>
+            </div>
+        </div>
+
+        <!-- MIDDLE TYPOGRAPHY AREA: Clean & Centered on Pure White -->
+        <div class="px-6 text-center my-auto py-3">
+            <!-- Small Rounded Pill Badge -->
+            <div class="inline-flex items-center justify-center px-3.5 py-1.5 rounded-full border border-line4/35 bg-line4-soft/60 text-line4-dark text-xs font-bold tracking-tight mb-4">
+                <span data-i18n="pill_tag">명동역 4호선 지하상가 짐보관</span>
+            </div>
+
+            <!-- Main Brand Title: 'Bag' in Black, 'hug' in Sky-Blue -->
+            <h1 class="text-4xl sm:text-[42px] font-extrabold tracking-tight leading-none mb-3.5">
+                <span class="text-[#111827]">Bag</span><span class="text-line4">hug</span>
+            </h1>
+
+            <!-- Concise 2-Line Description -->
+            <p class="text-[15px] text-gray-600 leading-relaxed max-w-[290px] mx-auto font-medium" data-i18n="subtitle">
+                앱 설치 없이 매장에 들어가 바로 맡기고,<br>
+                두 손 가볍게 명동을 여행하세요.
+            </p>
+        </div>
+
+        <!-- BOTTOM ACTION AREA: Strictly TWO Stacked Buttons -->
+        <div class="px-6 pb-8 pt-4 space-y-3 bg-white">
+            <!-- 1. Primary Button: 신청하기 / Book Storage -->
+            <button onclick="openBookingModal()" class="w-full py-4 px-6 rounded-2xl bg-line4 hover:bg-line4-dark text-white font-extrabold text-base shadow-sky transition-all active:scale-[0.99]">
+                <span data-i18n="btn_apply">신청하기</span>
+            </button>
+
+            <!-- 2. Secondary Button: 찾아보기 / Find Spots -->
+            <button onclick="openSpotsModal()" class="w-full py-4 px-6 rounded-2xl bg-white hover:bg-gray-50 text-gray-900 border border-gray-200 font-bold text-base transition-all active:scale-[0.99]">
+                <span data-i18n="btn_explore">찾아보기</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 1: LUGGAGE STORAGE APPLICATION ("신청하기" / "Book Storage") -->
+    <div id="booking-modal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-gray-900/50 backdrop-blur-xs p-0 sm:p-4" role="dialog" aria-modal="true">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-lg w-full max-h-[92vh] overflow-y-auto p-5 sm:p-6 shadow-2xl border border-gray-100 relative">
+            <button onclick="closeBookingModal()" class="sticky top-0 float-right z-20 w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 text-sm font-bold" aria-label="Close">
+                ✕
+            </button>
+
+            <div id="booking-form-view">
+                <div class="inline-flex items-center gap-1.5 bg-line4-soft text-line4-dark text-xs font-bold px-3 py-1 rounded-full mb-2">
+                    <span class="w-4 h-4 rounded-full bg-line4 text-white text-[10px] flex items-center justify-center">4</span>
+                    <span data-i18n="modal_book_badge">현장 카드 결제 · 간편 패스</span>
+                </div>
+                <h2 class="text-xl font-extrabold text-gray-900 mb-1" data-i18n="modal_book_title">짐보관 신청하기</h2>
+                <p class="text-xs text-gray-500 mb-4" data-i18n="modal_book_sub">지하상가 지도에서 매장을 선택하고 가방 개수를 입력하면 QR 패스가 발급됩니다.</p>
+
+                <!-- INTERACTIVE MYEONGDONG LINE 4 UNDERGROUND MAP -->
+                <div class="rounded-2xl bg-gradient-to-b from-sky-50/90 to-line4-soft/60 border border-line4/30 p-3.5 mb-4">
+                    <div class="flex items-center justify-between mb-2">
+                        <span class="inline-flex items-center gap-1.5 text-[11px] font-extrabold text-line4-dark">
+                            <span class="w-4 h-4 rounded-full bg-line4 text-white text-[10px] flex items-center justify-center">4</span>
+                            <span data-i18n="map_title">명동역 지하쇼핑센터 지도 (클릭하여 매장 선택)</span>
+                        </span>
+                        <span class="text-[10px] font-semibold text-gray-500" data-i18n="map_walk_hint">개찰구 도보 1~2분</span>
+                    </div>
+
+                    <!-- Visual Subway & Underground Corridor Map -->
+                    <div class="bg-white rounded-xl border border-sky-100 p-2 shadow-2xs">
+                        <svg viewBox="0 0 640 315" class="w-full h-auto select-none" role="img" aria-label="명동역 지하도상가 배치도">
+                            <!-- Title Banner matching uploaded map -->
+                            <rect x="200" y="6" width="240" height="24" rx="4" fill="#1D84C6"/>
+                            <text x="320" y="22" text-anchor="middle" fill="#FFFFFF" font-size="11.5" font-weight="800" letter-spacing="0.5">명동역 지하도상가 배치도</text>
+
+                            <!-- Migliore & Top Exits (EXIT 5, 6, 7, 8) -->
+                            <rect x="44" y="42" width="76" height="32" rx="3" fill="#E5E7EB"/>
+                            <text x="82" y="61" text-anchor="middle" fill="#4B5563" font-size="8.5" font-weight="700">밀리오레</text>
+
+                            <!-- EXIT 6 -->
+                            <rect x="158" y="46" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="167" y="55" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 6</text>
+                            <text x="186" y="55" fill="#4B5563" font-size="7.5" font-weight="700">명동</text>
+
+                            <!-- EXIT 5 -->
+                            <rect x="92" y="76" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="101" y="85" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 5</text>
+                            <text x="64" y="85" text-anchor="middle" fill="#4B5563" font-size="7" font-weight="700">회현지하상가</text>
+
+                            <!-- EXIT 7 -->
+                            <rect x="394" y="84" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="403" y="93" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 7</text>
+                            <text x="382" y="93" text-anchor="end" fill="#4B5563" font-size="7.5" font-weight="700">명동</text>
+
+                            <!-- EXIT 8 & Sejong Hotel -->
+                            <rect x="546" y="84" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="555" y="93" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 8</text>
+                            <rect x="568" y="68" width="46" height="22" rx="3" fill="#E5E7EB"/>
+                            <text x="591" y="82" text-anchor="middle" fill="#4B5563" font-size="7.5" font-weight="700">세종호텔</text>
+
+                            <!-- Main Underground Corridor Floor -->
+                            <path d="M36 96 H120 V64 H158 V106 H574 V246 H74 V230 H36 Z" fill="#FEFCE8" stroke="#93C5FD" stroke-width="1.5"/>
+
+                            <!-- Left: Subway Myeongdong Station Entrance -->
+                            <rect x="20" y="154" width="66" height="18" rx="4" fill="#38BDF8"/>
+                            <text x="53" y="166" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="800">🚇 지하철 명동역</text>
+
+                            <!-- Zone A (Grey blocks on left: A-1~4, A-5, A-6~7) -->
+                            <rect x="38" y="98" width="80" height="22" rx="2" fill="#CBD5E1" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="78" y="112" text-anchor="middle" fill="#334155" font-size="8" font-weight="700">A-4 · A-3 · A-2 · A-1</text>
+
+                            <!-- Clickable Spot 1: A-5 (서측 A구역) -->
+                            <g onclick="selectMapSpot(1)" class="cursor-pointer" id="map-pin-1">
+                                <rect x="90" y="175" width="36" height="25" rx="3" fill="#00A5DE" stroke="#0284C7" stroke-width="2" class="map-pin-box transition-all"/>
+                                <text x="108" y="186" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="800" class="map-pin-code">A-5</text>
+                                <text x="108" y="196" text-anchor="middle" fill="#E0F4FC" font-size="6.5" font-weight="700" class="map-pin-sub">다담카페</text>
+                            </g>
+                            <rect x="94" y="202" width="28" height="24" rx="2" fill="#CBD5E1" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="108" y="217" text-anchor="middle" fill="#334155" font-size="7.5" font-weight="700">A-6·7</text>
+
+                            <!-- Zone B (Top Yellow Row: B-1 ~ B-24) -->
+                            <rect x="166" y="114" width="136" height="24" rx="2" fill="#FCD34D" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="234" y="129" text-anchor="middle" fill="#78350F" font-size="7.5" font-weight="700">B-1~12</text>
+
+                            <!-- Clickable Spot 2: B-13·14 (상단 노란색 B구역 중앙) -->
+                            <g onclick="selectMapSpot(2)" class="cursor-pointer" id="map-pin-2">
+                                <rect x="304" y="112" width="44" height="28" rx="4" fill="#FFFFFF" stroke="#00A5DE" stroke-width="2" class="map-pin-box transition-all"/>
+                                <text x="326" y="125" text-anchor="middle" fill="#0284C7" font-size="8" font-weight="800" class="map-pin-code">B-13·14</text>
+                                <text x="326" y="135" text-anchor="middle" fill="#64748B" font-size="6.5" font-weight="700" class="map-pin-sub">서울글로우</text>
+                            </g>
+
+                            <rect x="350" y="114" width="126" height="24" rx="2" fill="#FCD34D" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="413" y="129" text-anchor="middle" fill="#78350F" font-size="7.5" font-weight="700">B-15 ~ B-24</text>
+
+                            <!-- Zone C (Middle Peach/Coral Block: C-1 ~ C-26) -->
+                            <rect x="166" y="152" width="164" height="38" rx="2" fill="#FECACA" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="248" y="168" text-anchor="middle" fill="#7F1D1D" font-size="7.5" font-weight="700">C-1 ~ C-13</text>
+                            <text x="248" y="181" text-anchor="middle" fill="#7F1D1D" font-size="7.5" font-weight="700">C-14 ~ C-26</text>
+
+                            <!-- Zone D (Middle Lime/Light-Green Block: D-1 ~ D-20) -->
+                            <rect x="348" y="152" width="66" height="38" rx="2" fill="#D9F99D" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="381" y="168" text-anchor="middle" fill="#365314" font-size="7" font-weight="700">D-1~6</text>
+                            <text x="381" y="181" text-anchor="middle" fill="#365314" font-size="7" font-weight="700">D-11~15</text>
+
+                            <!-- Clickable Spot 3: D-7·8 (중앙 연두색 D구역) -->
+                            <g onclick="selectMapSpot(3)" class="cursor-pointer" id="map-pin-3">
+                                <rect x="416" y="150" width="44" height="42" rx="4" fill="#FFFFFF" stroke="#00A5DE" stroke-width="2" class="map-pin-box transition-all"/>
+                                <text x="438" y="168" text-anchor="middle" fill="#0284C7" font-size="8" font-weight="800" class="map-pin-code">D-7·8</text>
+                                <text x="438" y="179" text-anchor="middle" fill="#64748B" font-size="6.5" font-weight="700" class="map-pin-sub">코지삭스</text>
+                            </g>
+
+                            <rect x="462" y="152" width="26" height="38" rx="2" fill="#D9F99D" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="475" y="173" text-anchor="middle" fill="#365314" font-size="6.5" font-weight="700">D-9·10</text>
+
+                            <!-- Zone E (Bottom Green Row: E-1 ~ E-24) -->
+                            <rect x="166" y="206" width="224" height="24" rx="2" fill="#84CC16" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="278" y="221" text-anchor="middle" fill="#1A2E05" font-size="7.5" font-weight="700">E-1 ~ E-18</text>
+
+                            <!-- Clickable Spot 4: E-19·20 (하단 초록색 E구역) -->
+                            <g onclick="selectMapSpot(4)" class="cursor-pointer" id="map-pin-4">
+                                <rect x="392" y="204" width="46" height="28" rx="4" fill="#FFFFFF" stroke="#F59E0B" stroke-width="2" class="map-pin-box transition-all"/>
+                                <text x="415" y="217" text-anchor="middle" fill="#B45309" font-size="8" font-weight="800" class="map-pin-code">E-19·20</text>
+                                <text x="415" y="227" text-anchor="middle" fill="#64748B" font-size="6.5" font-weight="700" class="map-pin-sub">하나패션</text>
+                            </g>
+
+                            <rect x="440" y="206" width="38" height="24" rx="2" fill="#84CC16" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="459" y="221" text-anchor="middle" fill="#1A2E05" font-size="7" font-weight="700">E-21~24</text>
+
+                            <!-- Zone F (Right Pink Column: F-1 ~ F-10) -->
+                            <rect x="506" y="132" width="32" height="104" rx="2" fill="#FBCFE8" stroke="#FFFFFF" stroke-width="1"/>
+                            <text x="522" y="186" text-anchor="middle" fill="#831843" font-size="7.5" font-weight="700">F-1~10</text>
+
+                            <!-- Bottom Exits (EXIT 4, 3, 2) -->
+                            <rect x="74" y="248" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="83" y="257" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 4</text>
+
+                            <rect x="412" y="248" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="421" y="257" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 3</text>
+                            <rect x="372" y="264" width="54" height="18" rx="3" fill="#E5E7EB"/>
+                            <text x="399" y="276" text-anchor="middle" fill="#4B5563" font-size="7" font-weight="700">퍼시픽호텔</text>
+
+                            <rect x="576" y="236" width="18" height="13" rx="2" fill="#1D84C6"/>
+                            <text x="585" y="245" text-anchor="middle" fill="#FFFFFF" font-size="6.5" font-weight="800">EXIT 2</text>
+                            <rect x="586" y="264" width="46" height="18" rx="3" fill="#E5E7EB"/>
+                            <text x="609" y="276" text-anchor="middle" fill="#4B5563" font-size="7" font-weight="700">프린스호텔</text>
+                        </svg>
+
+                        <!-- Quick Store Selector Pills synced with the Interior Map -->
+                        <div class="grid grid-cols-4 gap-1.5 mt-2">
+                            <button type="button" onclick="selectMapSpot(1)" id="map-btn-1" class="map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-extrabold bg-line4 text-white transition-all truncate">
+                                A구역 · A-5
+                            </button>
+                            <button type="button" onclick="selectMapSpot(2)" id="map-btn-2" class="map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700 hover:bg-line4-soft transition-all truncate">
+                                B구역 · B-13·14
+                            </button>
+                            <button type="button" onclick="selectMapSpot(3)" id="map-btn-3" class="map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700 hover:bg-line4-soft transition-all truncate">
+                                D구역 · D-7·8
+                            </button>
+                            <button type="button" onclick="selectMapSpot(4)" id="map-btn-4" class="map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700 hover:bg-amber-50 transition-all truncate">
+                                E구역 · E-19·20
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Selected Spot Live Info Bar -->
+                    <div id="map-selected-info" class="mt-2.5 bg-white/95 rounded-xl px-3.5 py-2.5 border border-sky-100 flex items-center justify-between gap-2">
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-1.5">
+                                <span id="map-info-exit" class="text-[10px] font-extrabold text-line4-dark bg-line4-soft px-2 py-0.5 rounded-full">지하도상가 A구역 · 개찰구 바로 앞</span>
+                                <span id="map-info-open" class="text-[10px] font-bold text-emerald-700">● 6 spots open</span>
+                            </div>
+                            <div id="map-info-name" class="text-xs font-extrabold text-gray-900 truncate mt-1">Dadam K-Souvenir & Cafe (A-5호)</div>
+                            <div id="map-info-perk" class="text-[11px] text-amber-700 font-semibold truncate">🎁 10% off Iced Americano</div>
+                        </div>
+                    </div>
+                </div>
+
+                <form onsubmit="submitBooking(event)" class="space-y-3.5">
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="form_spot_label">매장 선택 (명동역 지하쇼핑센터 내부)</label>
+                        <select id="booking-spot" onchange="selectMapSpot(parseInt(this.value, 10))" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2.5 text-sm font-semibold text-gray-900 focus:outline-none focus:border-line4">
+                            <option value="1">지하도상가 A구역 · 다담 기프트 & 카페 (A-5호)</option>
+                            <option value="2">지하도상가 B구역 · 서울글로우 뷰티샵 (B-13·14호)</option>
+                            <option value="3">지하도상가 D구역 · 명동 코지 삭스 스튜디오 (D-7·8호)</option>
+                            <option value="4">지하도상가 E구역 · 하나 트래블 & 패션 (E-19·20호)</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="form_small_label">소형 가방 (₩5,000)</label>
+                            <input type="number" id="small-bag-count" min="0" max="10" value="0" oninput="updateEstimatedTotal()" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-line4">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="form_large_label">캐리어 (₩8,000)</label>
+                            <input type="number" id="large-bag-count" min="0" max="10" value="1" oninput="updateEstimatedTotal()" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm font-bold text-gray-900 focus:outline-none focus:border-line4">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-3">
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="form_name_label">이름</label>
+                            <input type="text" id="guest-name" required placeholder="Alex Kim" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:outline-none focus:border-line4">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-bold text-gray-700 mb-1" data-i18n="form_time_label">방문 시간</label>
+                            <input type="time" id="dropoff-time" value="11:00" class="w-full rounded-xl border border-gray-200 bg-gray-50 px-3.5 py-2 text-sm text-gray-900 focus:outline-none focus:border-line4">
+                        </div>
+                    </div>
+
+                    <div class="flex items-center justify-between bg-line4-soft/70 border border-line4/25 rounded-2xl px-4 py-2.5">
+                        <span class="text-xs font-bold text-gray-800" data-i18n="form_est_label">예상 1일 요금 (현장 결제)</span>
+                        <span id="estimated-total" class="text-lg font-extrabold text-line4-dark">₩8,000</span>
+                    </div>
+
+                    <p id="bag-validation-msg" class="hidden text-xs font-bold text-rose-600 text-center" data-i18n="form_validation">
+                        가방 또는 캐리어를 1개 이상 선택해주세요.
+                    </p>
+
+                    <button type="submit" class="w-full py-3.5 rounded-2xl bg-line4 hover:bg-line4-dark text-white font-extrabold text-sm shadow-sky transition-all">
+                        <span data-i18n="form_submit_btn">보관 패스 발급하기</span>
+                    </button>
+                </form>
+            </div>
+
+            <!-- Pass Ready Confirmation View -->
+            <div id="booking-success-view" class="hidden text-center py-1">
+                <div class="inline-flex items-center gap-1.5 bg-emerald-50 text-emerald-700 text-xs font-extrabold px-3 py-1 rounded-full mb-2">
+                    <span>✓</span>
+                    <span data-i18n="pass_ready_badge">Instant Pass Issued</span>
+                </div>
+                <h3 class="text-xl font-extrabold text-gray-900 mb-1" data-i18n="pass_ready_title">보관 패스가 발급되었습니다!</h3>
+                <p class="text-xs text-gray-500 mb-4" data-i18n="pass_ready_sub">매장에 도착하시면 아래 QR 코드를 보여주세요.</p>
+
+                <!-- Scannable QR Code + Pass Code Card -->
+                <div class="bg-gray-50 rounded-3xl p-4 border-2 border-dashed border-line4/60 mb-3 flex flex-col items-center">
+                    <div class="bg-white p-3 rounded-2xl shadow-xs border border-gray-100 mb-2">
+                        <div id="pass-qr-container" class="w-36 h-36 flex items-center justify-center"></div>
+                    </div>
+                    <div class="text-[10px] font-bold uppercase tracking-wider text-line4-dark">Baghug Pass Code</div>
+                    <div id="pass-code" class="text-2xl font-extrabold tracking-widest text-gray-900 my-0.5">BH-4821</div>
+                    <div id="pass-summary" class="text-xs font-medium text-gray-600 leading-relaxed mb-2.5"></div>
+
+                    <!-- Toggle Underground Map inside Issued Pass Screen -->
+                    <button type="button" onclick="toggleUndergroundMap('pass')" id="toggle-map-btn-pass" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-white hover:bg-line4-soft text-line4-dark border border-line4/35 text-xs font-extrabold shadow-2xs transition-all active:scale-95">
+                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M9 20l-5.447-2.724A1 1 0 013 16.382V5.618a1 1 0 011.447-.894L9 7m0 13l6-3m-6 3V7m6 10l4.553 2.276A1 1 0 0021 18.382V7.618a1 1 0 00-.553-.894L15 4m0 13V4m0 0L9 7"/>
+                        </svg>
+                        <span data-i18n="btn_view_map">명동역 지하상가 지도 보기</span>
+                    </button>
+
+                    <!-- Interactive Myeongdong Underground Shopping Center Map (Pass View) -->
+                    <div id="underground-map-pass" class="hidden w-full mt-3 text-left rounded-2xl bg-line4-soft/80 border border-line4/30 p-3.5 transition-all"></div>
+                </div>
+
+                <div class="bg-amber-50/80 rounded-2xl p-3 mb-3.5">
+                    <p class="text-sm font-extrabold text-gray-900">"안녕하세요! 백허그 패스 있어요."</p>
+                    <p class="text-[11px] text-gray-500 mt-0.5">("Hello! I have a Baghug storage pass.")</p>
+                    <div class="mt-2 pt-2 border-t border-amber-200/70">
+                        <p class="text-xs font-extrabold text-amber-800" data-i18n="pass_arrive_notice">⏰ 패스 발급 후 10분 이내에 매장으로 방문해주세요.</p>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 gap-2.5">
+                    <button type="button" onclick="downloadQrPass()" class="py-3.5 px-3 rounded-2xl bg-gray-100 hover:bg-gray-200 text-gray-900 font-bold text-xs sm:text-sm transition-all flex items-center justify-center gap-1.5">
+                        <svg class="w-4 h-4 text-line4-dark" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/>
+                        </svg>
+                        <span data-i18n="btn_save_qr">QR 저장</span>
+                    </button>
+                    <button type="button" onclick="closeBookingModal()" class="py-3.5 px-3 rounded-2xl bg-line4 hover:bg-line4-dark text-white font-bold text-xs sm:text-sm shadow-sky transition-all">
+                        <span data-i18n="btn_done">확인</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: PARTNER SPOT FINDER & SHOPKEEPER CARD ("찾아보기" / "Find Spots") -->
+    <div id="spots-modal" class="fixed inset-0 z-50 hidden items-end sm:items-center justify-center bg-gray-900/50 backdrop-blur-xs p-0 sm:p-4" role="dialog" aria-modal="true">
+        <div class="bg-white rounded-t-3xl sm:rounded-3xl max-w-md w-full max-h-[88vh] flex flex-col shadow-2xl border border-gray-100 relative">
+            <div class="p-6 pb-4 border-b border-gray-100 flex items-center justify-between">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 text-xs font-bold text-line4-dark mb-1">
+                        <span class="w-4 h-4 rounded-full bg-line4 text-white text-[10px] flex items-center justify-center">4</span>
+                        <span data-i18n="spots_modal_badge">명동역 4호선 지하쇼핑센터 내부</span>
+                    </div>
+                    <h2 class="text-lg font-extrabold text-gray-900" data-i18n="spots_modal_title">지하쇼핑센터 제휴 매장 찾아보기</h2>
+                </div>
+                    <h2 class="text-lg font-extrabold text-gray-900" data-i18n="spots_modal_title">제휴 보관 매장 찾아보기</h2>
+                </div>
+                <button onclick="closeSpotsModal()" class="w-8 h-8 rounded-full bg-gray-100 hover:bg-gray-200 flex items-center justify-center text-gray-700 text-sm font-bold" aria-label="Close">
+                    ✕
+                </button>
+            </div>
+
+            <!-- Bilingual Show-to-Shopkeeper Quick Banner -->
+            <div class="mx-6 mt-4 p-3.5 rounded-2xl bg-line4-soft/70 border border-line4/25 text-center">
+                <div class="text-[10px] font-bold uppercase tracking-wider text-line4-dark mb-1" data-i18n="show_keeper_hint">
+                    매장 직원에게 보여주세요 · Show to Shopkeeper
+                </div>
+                <p class="text-sm font-extrabold text-gray-900">"안녕하세요! 백허그(Baghug) 짐 보관하러 왔어요."</p>
+            </div>
+
+            <!-- Scrollable Partner Spots List -->
+            <div id="spots-list" class="p-6 pt-4 overflow-y-auto space-y-3"></div>
+        </div>
+    </div>
+
+    <script>
+        const spotsData = [
+            {
+                id: 1,
+                exitLabel: '지하도상가 A구역 · 개찰구 바로 앞',
+                name: 'Dadam K-Souvenir & Cafe',
+                krName: '다담 기프트 & 카페',
+                unit: '명동역 지하도상가 A-5호',
+                code: 'A-5',
+                spotsLeft: 6,
+                hours: '09:00 – 21:00',
+                perk: '10% off Iced Americano',
+                direction: {
+                    en: 'Located in Grey Zone A (unit A-5), right in front of Myeongdong Station ticket gates.',
+                    jp: '明洞駅改札を出てすぐ左側、グレー区画 A-5号店です。',
+                    cn: '位于明洞站检票口正前方灰色A区 A-5号商铺。',
+                    kr: '명동역 개찰구 바로 앞 회색 A구역 A-5호 매장입니다.'
+                }
+            },
+            {
+                id: 2,
+                exitLabel: '지하도상가 B구역 (노란색 라인)',
+                name: 'Seoul Glow K-Beauty',
+                krName: '서울글로우 뷰티샵',
+                unit: '명동역 지하도상가 B-13·14호',
+                code: 'B-13·14',
+                spotsLeft: 4,
+                hours: '09:30 – 21:00',
+                perk: 'Free sheet mask gift',
+                direction: {
+                    en: 'Located in the upper Yellow Zone B (unit B-13·14) inside Myeongdong Underground Shopping Center.',
+                    jp: '明洞地下ショッピングセンター上段・黄色エリア B-13·14号コスメ店です。',
+                    cn: '位于明洞地下购物中心上方黄色B区 B-13·14号美妆店。',
+                    kr: '명동역 지하도상가 상단 노란색 B구역 중앙 B-13·14호 뷰티 매장입니다.'
+                }
+            },
+            {
+                id: 3,
+                exitLabel: '지하도상가 D구역 (연두색 라인)',
+                name: 'Myeongdong Cozy Socks',
+                krName: '명동 코지 삭스 스튜디오',
+                unit: '명동역 지하도상가 D-7·8호',
+                code: 'D-7·8',
+                spotsLeft: 8,
+                hours: '09:00 – 21:00',
+                perk: 'Buy 5 socks, get 1 free',
+                direction: {
+                    en: 'Located in the center Lime-Green Zone D (unit D-7·8) inside Myeongdong Underground Shopping Center.',
+                    jp: '明洞地下ショッピングセンター中央・黄緑エリア D-7·8号店です。',
+                    cn: '位于明洞地下购物中心中部浅绿D区 D-7·8号店铺。',
+                    kr: '명동역 지하도상가 중앙 연두색 D구역 D-7·8호 매장입니다.'
+                }
+            },
+            {
+                id: 4,
+                exitLabel: '지하도상가 E구역 (초록색 라인)',
+                name: 'Hana Travel & Fashion',
+                krName: '하나 트래블 & 패션',
+                unit: '명동역 지하도상가 E-19·20호',
+                code: 'E-19·20',
+                spotsLeft: 5,
+                hours: '08:30 – 21:00',
+                perk: '5% off travel pouches',
+                direction: {
+                    en: 'Located in the lower Green Zone E (unit E-19·20) inside Myeongdong Underground Shopping Center.',
+                    jp: '明洞地下ショッピングセンター下段・緑エリア E-19·20号ショップです。',
+                    cn: '位于明洞地下购物中心下方绿色E区 E-19·20号店铺。',
+                    kr: '명동역 지하도상가 하단 초록색 E구역 E-19·20호 매장입니다.'
+                }
+            }
+        ];
+
+        const translations = {
+            en: {
+                pill_tag: 'Myeongdong Stn (Line 4) Luggage Care',
+                subtitle: 'No app needed. Drop your bags with local shopkeepers and explore Seoul hands-free.',
+                btn_apply: 'Book Storage',
+                btn_explore: 'Find Spots',
+                modal_book_badge: 'Pay On-Site · Quick Pass',
+                modal_book_title: 'Book Luggage Storage',
+                modal_book_sub: 'Tap a shop inside Myeongdong Underground Shopping Center and enter your bags for an instant QR pass.',
+                map_title: 'Myeongdong Underground Arcade Map (Tap shop)',
+                map_walk_hint: 'Inside Arcade · 1–2 min',
+                map_header_title: 'Myeongdong Underground Shopping Center',
+                map_tap_hint: 'Tap shop pin',
+                map_gates_label: 'Line 4 Ticket Gates',
+                btn_view_map: 'View Underground Arcade Map',
+                btn_hide_map: 'Hide Underground Arcade Map',
+                form_spot_label: 'Select Shop (Inside Underground Arcade)',
+                form_small_label: 'Small Bag (₩5,000)',
+                form_large_label: 'Suitcase (₩8,000)',
+                form_name_label: 'Your Name',
+                form_time_label: 'Drop-off Time',
+                form_est_label: 'Estimated Daily Total',
+                form_validation: 'Please select at least 1 bag or suitcase.',
+                form_submit_btn: 'Get Storage Pass',
+                pass_ready_badge: 'Instant Pass Issued',
+                pass_ready_title: 'Storage Pass Ready!',
+                pass_ready_sub: 'Show this QR code to the shopkeeper when you arrive.',
+                pass_arrive_notice: '⏰ Please arrive at the shop within 10 minutes.',
+                btn_save_qr: 'Save QR',
+                btn_done: 'Done',
+                spots_modal_badge: 'Inside Myeongdong Underground Arcade',
+                spots_modal_title: 'Partner Shops Inside Arcade',
+                show_keeper_hint: 'Show this screen to the shopkeeper',
+                card_select_btn: 'Book Here'
+            },
+            jp: {
+                pill_tag: '明洞駅 4号線 地下ショッピングセンター',
+                subtitle: 'アプリ不要でお店にすぐ預けて、手ぶらで身軽に明洞を楽しもう。',
+                btn_apply: '申し込む',
+                btn_explore: '預け場所を探す',
+                modal_book_badge: '現地カード払い · かんたんパス',
+                modal_book_title: '荷物預かりを申し込む',
+                modal_book_sub: '明洞地下ショッピングセンター内の店舗を選び、個数を入力するとQRパスが発行されます。',
+                map_title: '明洞地下ショッピングセンター内マップ（タップ選択）',
+                map_walk_hint: '地下街内 · 徒歩1〜2分',
+                map_header_title: '明洞駅 地下ショッピングセンター内部地図',
+                map_tap_hint: '店舗をタップして選択',
+                map_gates_label: '4号線 改札口',
+                btn_view_map: '地下ショッピングセンター地図を見る',
+                btn_hide_map: '地下ショッピングセンター地図を閉じる',
+                form_spot_label: '提携店舗（明洞地下ショッピングセンター内）',
+                form_small_label: '小型バッグ (₩5,000)',
+                form_large_label: 'スーツケース (₩8,000)',
+                form_name_label: 'お名前',
+                form_time_label: '来店時刻',
+                form_est_label: '1日料金の目安（現地払い）',
+                form_validation: 'バッグまたはスーツケースを1つ以上選択してください。',
+                form_submit_btn: '預かりパスを発行する',
+                pass_ready_badge: 'パス発行完了',
+                pass_ready_title: '預かりパスが発行されました！',
+                pass_ready_sub: 'ご来店時にスタッフへこのQRコードをお見せください。',
+                pass_arrive_notice: '⏰ パス発行後、10分以内にお店へお越しください。',
+                btn_save_qr: 'QR保存',
+                btn_done: '完了',
+                spots_modal_badge: '明洞地下ショッピングセンター内',
+                spots_modal_title: '地下街内の提携ショップ一覧',
+                show_keeper_hint: 'スタッフにこの画面をお見せください',
+                card_select_btn: 'ここを申し込む'
+            },
+            cn: {
+                pill_tag: '4号线明洞站 地下购物中心行李寄存',
+                subtitle: '无需下载App，进店即可轻松寄存，空手畅游明洞。',
+                btn_apply: '立即申请',
+                btn_explore: '查看寄存点',
+                modal_book_badge: '现场刷卡 · 快速凭证',
+                modal_book_title: '申请行李寄存',
+                modal_book_sub: '在明洞地下购物中心内部地图点击选择店铺并填写数量，即可生成二维码凭证。',
+                map_title: '明洞地下购物中心内部地图（点击选择店铺）',
+                map_walk_hint: '地下商街内 · 1~2分钟',
+                map_header_title: '明洞站地下购物中心内部地图',
+                map_tap_hint: '点击店铺图标选择',
+                map_gates_label: '4号线检票口',
+                btn_view_map: '查看地下购物中心地图',
+                btn_hide_map: '收起地下购物中心地图',
+                form_spot_label: '合作店铺（明洞地下购物中心内）',
+                form_small_label: '小包 (₩5,000)',
+                form_large_label: '行李箱 (₩8,000)',
+                form_name_label: '您的姓名',
+                form_time_label: '预计到店时间',
+                form_est_label: '预计全天费用（现场支付）',
+                form_validation: '请至少选择1件小包或行李箱。',
+                form_submit_btn: '生成寄存凭证',
+                pass_ready_badge: '凭证已生成',
+                pass_ready_title: '寄存凭证已生成！',
+                pass_ready_sub: '到店后请向工作人员出示此二维码。',
+                pass_arrive_notice: '⏰ 请在领取凭证后10分钟内到店。',
+                btn_save_qr: '保存二维码',
+                btn_done: '完成',
+                spots_modal_badge: '明洞地下购物中心内部',
+                spots_modal_title: '地下购物中心合作店铺',
+                show_keeper_hint: '到店请向店主出示此画面',
+                card_select_btn: '选择此店'
+            },
+            kr: {
+                pill_tag: '명동역 4호선 지하상가 짐보관',
+                subtitle: '앱 설치 없이 매장에 들어가 바로 맡기고,<br>두 손 가볍게 명동을 여행하세요.',
+                btn_apply: '신청하기',
+                btn_explore: '찾아보기',
+                modal_book_badge: '현장 카드 결제 · 간편 패스',
+                modal_book_title: '짐보관 신청하기',
+                modal_book_sub: '명동역 지하쇼핑센터 내부 지도에서 매장을 선택하면 QR 패스가 발급됩니다.',
+                map_title: '명동역 지하쇼핑센터 내부 지도 (클릭하여 매장 선택)',
+                map_walk_hint: '지하상가 내부 · 도보 1~2분',
+                map_header_title: '명동역 지하쇼핑센터 내부 안내도',
+                map_tap_hint: '상점 핀을 눌러 선택',
+                map_gates_label: '4호선 명동역 개찰구',
+                btn_view_map: '명동역 지하쇼핑센터 지도 보기',
+                btn_hide_map: '명동역 지하쇼핑센터 지도 닫기',
+                form_spot_label: '매장 선택 (명동역 지하쇼핑센터 내부)',
+                form_small_label: '소형 가방 (₩5,000)',
+                form_large_label: '캐리어 (₩8,000)',
+                form_name_label: '이름',
+                form_time_label: '방문 시간',
+                form_est_label: '예상 1일 요금 (현장 결제)',
+                form_validation: '가방 또는 캐리어를 1개 이상 선택해주세요.',
+                form_submit_btn: '보관 패스 발급하기',
+                pass_ready_badge: '패스 발급 완료',
+                pass_ready_title: '보관 패스가 발급되었습니다!',
+                pass_ready_sub: '매장에 도착하시면 아래 QR 코드를 보여주세요.',
+                pass_arrive_notice: '⏰ 패스 발급 후 10분 이내에 매장으로 방문해주세요.',
+                btn_save_qr: 'QR 저장',
+                btn_done: '확인',
+                spots_modal_badge: '명동역 4호선 지하쇼핑센터 내부',
+                spots_modal_title: '지하쇼핑센터 제휴 매장 찾아보기',
+                show_keeper_hint: '매장 직원에게 보여주세요 · Show to Shopkeeper',
+                card_select_btn: '이 매장 신청'
+            }
+        };
+
+        let currentLang = 'kr';
+        let latestPassData = null;
+
+        function selectMapSpot(spotId) {
+            const spot = spotsData.find(s => s.id === Number(spotId)) || spotsData[0];
+
+            const selectEl = document.getElementById('booking-spot');
+            if (selectEl) {
+                selectEl.value = String(spot.id);
+            }
+
+            spotsData.forEach(s => {
+                const pinGroup = document.getElementById(`map-pin-${s.id}`);
+                const btnEl = document.getElementById(`map-btn-${s.id}`);
+                const isSelected = s.id === spot.id;
+                const isExit8 = s.id === 4;
+
+                if (pinGroup) {
+                    const box = pinGroup.querySelector('.map-pin-box');
+                    const codeText = pinGroup.querySelector('.map-pin-code');
+                    const subText = pinGroup.querySelector('.map-pin-sub');
+
+                    if (isSelected) {
+                        if (box) {
+                            box.setAttribute('fill', isExit8 ? '#F59E0B' : '#00A5DE');
+                            box.setAttribute('stroke', isExit8 ? '#B45309' : '#0284C7');
+                            box.setAttribute('stroke-width', '2.5');
+                        }
+                        if (codeText) codeText.setAttribute('fill', '#FFFFFF');
+                        if (subText) subText.setAttribute('fill', isExit8 ? '#FEF3C7' : '#E0F4FC');
+                    } else {
+                        if (box) {
+                            box.setAttribute('fill', '#FFFFFF');
+                            box.setAttribute('stroke', isExit8 ? '#F59E0B' : '#00A5DE');
+                            box.setAttribute('stroke-width', '1.8');
+                        }
+                        if (codeText) codeText.setAttribute('fill', isExit8 ? '#B45309' : '#0284C7');
+                        if (subText) subText.setAttribute('fill', '#64748B');
+                    }
+                }
+
+                if (btnEl) {
+                    if (isSelected) {
+                        btnEl.className = isExit8
+                            ? 'map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-extrabold bg-amber-500 text-white shadow-2xs transition-all truncate'
+                            : 'map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-extrabold bg-line4 text-white shadow-2xs transition-all truncate';
+                    } else {
+                        btnEl.className = 'map-spot-btn py-1.5 px-1 rounded-lg text-[10px] font-bold bg-gray-100 text-gray-700 hover:bg-line4-soft transition-all truncate';
+                    }
+                }
+            });
+
+            const infoExit = document.getElementById('map-info-exit');
+            const infoOpen = document.getElementById('map-info-open');
+            const infoName = document.getElementById('map-info-name');
+            const infoPerk = document.getElementById('map-info-perk');
+
+            if (infoExit) infoExit.textContent = spot.exitLabel;
+            if (infoOpen) infoOpen.textContent = `● ${spot.spotsLeft} spots open`;
+            if (infoName) infoName.textContent = `${spot.name} (${spot.unit.replace('Underground Arcade ', '')})`;
+            if (infoPerk) infoPerk.textContent = `🎁 ${spot.perk}`;
+        }
+
+        function setLang(lang) {
+            currentLang = translations[lang] ? lang : 'en';
+            const dict = translations[currentLang];
+            document.documentElement.lang = currentLang === 'cn' ? 'zh' : currentLang;
+
+            document.querySelectorAll('[data-i18n]').forEach(el => {
+                const key = el.getAttribute('data-i18n');
+                if (dict[key]) {
+                    el.innerHTML = dict[key];
+                }
+            });
+
+            document.querySelectorAll('.lang-btn').forEach(btn => {
+                btn.className = 'lang-btn px-2 py-1 rounded-full transition-all text-gray-500 hover:text-gray-900';
+            });
+            const activeBtn = document.getElementById(`lang-${currentLang}`);
+            if (activeBtn) {
+                activeBtn.className = 'lang-btn px-2 py-1 rounded-full transition-all bg-line4 text-white shadow-sm';
+            }
+
+            renderSpotsList();
+            syncOpenUndergroundMaps();
+        }
+
+        function renderSpotsList() {
+            const container = document.getElementById('spots-list');
+            if (!container) return;
+            const dict = translations[currentLang] || translations.en;
+
+            container.innerHTML = spotsData.map(spot => {
+                const dirText = (spot.direction && spot.direction[currentLang]) || spot.direction.en;
+                return `
+                    <div class="rounded-2xl border border-gray-200 p-4 hover:border-line4/60 transition-all bg-white">
+                        <div class="flex items-center justify-between gap-2 mb-2">
+                            <span class="inline-flex items-center gap-1 text-[11px] font-extrabold text-line4-dark bg-line4-soft px-2.5 py-0.5 rounded-full">
+                                <span class="w-3.5 h-3.5 rounded-full bg-line4 text-white text-[9px] flex items-center justify-center">4</span>
+                                ${spot.exitLabel}
+                            </span>
+                            <span class="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-full">
+                                ● ${spot.spotsLeft} open
+                            </span>
+                        </div>
+                        <div class="font-extrabold text-gray-900 text-sm">${spot.name} <span class="text-xs font-semibold text-gray-500">(${spot.krName})</span></div>
+                        <div class="text-xs text-gray-500 mt-0.5">${spot.unit} · ${spot.hours}</div>
+                        <p class="text-[11px] text-gray-600 mt-1.5 leading-snug">${dirText}</p>
+                        <div class="mt-3 flex items-center justify-between gap-2">
+                            <span class="text-[11px] font-semibold text-amber-700 bg-amber-50 px-2.5 py-1 rounded-lg">🎁 ${spot.perk}</span>
+                            <button type="button" onclick="applyFromSpotsModal(${spot.id})" class="px-3.5 py-1.5 rounded-xl bg-line4 hover:bg-line4-dark text-white text-xs font-extrabold shadow-2xs transition-all shrink-0">
+                                ${dict.card_select_btn}
+                            </button>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        function openSpotsModal() {
+            renderSpotsList();
+            const modal = document.getElementById('spots-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeSpotsModal() {
+            const modal = document.getElementById('spots-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function applyFromSpotsModal(spotId) {
+            closeSpotsModal();
+            openBookingModal(spotId);
+        }
+
+        function renderUndergroundMap(containerId, selectedSpotId) {
+            const container = document.getElementById(containerId);
+            if (!container) return;
+
+            const dict = translations[currentLang] || translations.en;
+            const activeSpot = spotsData.find(s => s.id === Number(selectedSpotId)) || spotsData[0];
+            const dirText = (activeSpot.direction && activeSpot.direction[currentLang]) || activeSpot.direction.en;
+
+            const pinStyles = (spotId) => {
+                const isSelected = Number(selectedSpotId) === spotId;
+                return isSelected
+                    ? 'fill="#00A5DE" stroke="#0284C7" stroke-width="2.2"'
+                    : 'fill="#FFFFFF" stroke="#00A5DE" stroke-width="1.8"';
+            };
+            const pinTextFill = (spotId) => (Number(selectedSpotId) === spotId ? '#FFFFFF' : '#0284C7');
+
+            container.innerHTML = `
+                <div class="flex items-center justify-between gap-2 mb-2">
+                    <div class="flex items-center gap-1.5 text-[11px] font-extrabold text-line4-dark">
+                        <span class="w-4 h-4 rounded-full bg-line4 text-white text-[10px] flex items-center justify-center">4</span>
+                        <span>${dict.map_header_title}</span>
+                    </div>
+                    <span class="text-[10px] font-semibold text-gray-500">${dict.map_tap_hint}</span>
+                </div>
+
+                <div class="bg-white rounded-xl border border-line4/25 p-2 mb-2.5 overflow-hidden">
+                    <svg viewBox="0 0 640 275" class="w-full h-auto select-none" role="img" aria-label="명동역 지하도상가 배치도">
+                        <rect x="200" y="6" width="240" height="22" rx="4" fill="#1D84C6"/>
+                        <text x="320" y="21" text-anchor="middle" fill="#FFFFFF" font-size="11" font-weight="800">명동역 지하도상가 배치도</text>
+
+                        <path d="M36 74 H120 V44 H158 V84 H574 V224 H74 V208 H36 Z" fill="#FEFCE8" stroke="#93C5FD" stroke-width="1.5"/>
+                        <rect x="20" y="132" width="66" height="18" rx="4" fill="#38BDF8"/>
+                        <text x="53" y="144" text-anchor="middle" fill="#FFFFFF" font-size="8" font-weight="800">🚇 지하철 명동역</text>
+
+                        <rect x="38" y="76" width="80" height="22" rx="2" fill="#CBD5E1"/>
+                        <text x="78" y="90" text-anchor="middle" fill="#334155" font-size="8" font-weight="700">A-1 ~ A-4</text>
+
+                        <g class="cursor-pointer" onclick="selectSpotFromMap(1)">
+                            <rect x="92" y="156" width="32" height="22" rx="3" ${pinStyles(1)}/>
+                            <text x="108" y="170" text-anchor="middle" fill="${pinTextFill(1)}" font-size="8" font-weight="800">A-5</text>
+                        </g>
+
+                        <rect x="166" y="92" width="136" height="24" rx="2" fill="#FCD34D"/>
+                        <text x="234" y="107" text-anchor="middle" fill="#78350F" font-size="7.5" font-weight="700">B-1~12</text>
+
+                        <g class="cursor-pointer" onclick="selectSpotFromMap(2)">
+                            <rect x="304" y="90" width="46" height="28" rx="4" ${pinStyles(2)}/>
+                            <text x="327" y="107" text-anchor="middle" fill="${pinTextFill(2)}" font-size="8" font-weight="800">B-13·14</text>
+                        </g>
+
+                        <rect x="352" y="92" width="124" height="24" rx="2" fill="#FCD34D"/>
+                        <text x="414" y="107" text-anchor="middle" fill="#78350F" font-size="7.5" font-weight="700">B-15~24</text>
+
+                        <rect x="166" y="130" width="164" height="38" rx="2" fill="#FECACA"/>
+                        <text x="248" y="152" text-anchor="middle" fill="#7F1D1D" font-size="7.5" font-weight="700">C-1 ~ C-26</text>
+
+                        <rect x="348" y="130" width="66" height="38" rx="2" fill="#D9F99D"/>
+                        <text x="381" y="152" text-anchor="middle" fill="#365314" font-size="7.5" font-weight="700">D-1~6</text>
+
+                        <g class="cursor-pointer" onclick="selectSpotFromMap(3)">
+                            <rect x="416" y="128" width="44" height="42" rx="4" ${pinStyles(3)}/>
+                            <text x="438" y="152" text-anchor="middle" fill="${pinTextFill(3)}" font-size="8" font-weight="800">D-7·8</text>
+                        </g>
+
+                        <rect x="166" y="184" width="224" height="24" rx="2" fill="#84CC16"/>
+                        <text x="278" y="199" text-anchor="middle" fill="#1A2E05" font-size="7.5" font-weight="700">E-1 ~ E-18</text>
+
+                        <g class="cursor-pointer" onclick="selectSpotFromMap(4)">
+                            <rect x="392" y="182" width="48" height="28" rx="4" ${pinStyles(4)}/>
+                            <text x="416" y="199" text-anchor="middle" fill="${pinTextFill(4)}" font-size="8" font-weight="800">E-19·20</text>
+                        </g>
+
+                        <rect x="506" y="110" width="32" height="104" rx="2" fill="#FBCFE8"/>
+                        <text x="522" y="164" text-anchor="middle" fill="#831843" font-size="7.5" font-weight="700">F-1~10</text>
+                    </svg>
+                </div>
+
+                <div class="bg-white rounded-xl px-3 py-2.5 border border-line4/20 flex items-start justify-between gap-2">
+                    <div>
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[10px] font-extrabold text-white bg-line4 px-1.5 py-0.5 rounded-md">${activeSpot.code}</span>
+                            <span class="text-xs font-extrabold text-gray-900">${activeSpot.name}</span>
+                        </div>
+                        <p class="text-[11px] text-gray-600 mt-1 leading-snug">${dirText}</p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function toggleUndergroundMap(context) {
+            const mapId = context === 'pass' ? 'underground-map-pass' : 'underground-map-form';
+            const btnId = context === 'pass' ? 'toggle-map-btn-pass' : 'toggle-map-btn-form';
+            const mapEl = document.getElementById(mapId);
+            const btnEl = document.getElementById(btnId);
+            const dict = translations[currentLang] || translations.en;
+
+            if (!mapEl) return;
+            const isHidden = mapEl.classList.contains('hidden');
+
+            if (isHidden) {
+                const selectedSpotId = context === 'pass' && latestPassData
+                    ? latestPassData.spotId
+                    : document.getElementById('booking-spot').value;
+                renderUndergroundMap(mapId, selectedSpotId);
+                mapEl.classList.remove('hidden');
+                if (btnEl && btnEl.querySelector('span')) {
+                    btnEl.querySelector('span').textContent = dict.btn_hide_map;
+                }
+            } else {
+                mapEl.classList.add('hidden');
+                if (btnEl && btnEl.querySelector('span')) {
+                    btnEl.querySelector('span').textContent = dict.btn_view_map;
+                }
+            }
+        }
+
+        function selectSpotFromMap(spotId) {
+            selectMapSpot(spotId);
+            if (latestPassData) {
+                latestPassData.spotId = spotId;
+            }
+            syncOpenUndergroundMaps();
+        }
+
+        function syncOpenUndergroundMaps() {
+            const dict = translations[currentLang] || translations.en;
+            const passMap = document.getElementById('underground-map-pass');
+            const passBtn = document.getElementById('toggle-map-btn-pass');
+            if (passMap && !passMap.classList.contains('hidden')) {
+                const spotId = latestPassData ? latestPassData.spotId : document.getElementById('booking-spot').value;
+                renderUndergroundMap('underground-map-pass', spotId);
+                if (passBtn && passBtn.querySelector('span')) {
+                    passBtn.querySelector('span').textContent = dict.btn_hide_map;
+                }
+            }
+        }
+
+        function openBookingModal(spotId = null) {
+            document.getElementById('booking-form-view').classList.remove('hidden');
+            document.getElementById('booking-success-view').classList.add('hidden');
+            document.getElementById('bag-validation-msg').classList.add('hidden');
+
+            const targetSpotId = spotId || parseInt(document.getElementById('booking-spot').value || '1', 10);
+            selectMapSpot(targetSpotId);
+            updateEstimatedTotal();
+
+            const modal = document.getElementById('booking-modal');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+        }
+
+        function closeBookingModal() {
+            const modal = document.getElementById('booking-modal');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+        }
+
+        function updateEstimatedTotal() {
+            const smallCount = Math.max(0, parseInt(document.getElementById('small-bag-count').value || '0', 10));
+            const largeCount = Math.max(0, parseInt(document.getElementById('large-bag-count').value || '0', 10));
+            const total = smallCount * 5000 + largeCount * 8000;
+            document.getElementById('estimated-total').textContent = `₩${total.toLocaleString()}`;
+        }
+
+        function submitBooking(event) {
+            event.preventDefault();
+            const smallCount = Math.max(0, parseInt(document.getElementById('small-bag-count').value || '0', 10));
+            const largeCount = Math.max(0, parseInt(document.getElementById('large-bag-count').value || '0', 10));
+
+            if (smallCount + largeCount === 0) {
+                document.getElementById('bag-validation-msg').classList.remove('hidden');
+                return;
+            }
+            document.getElementById('bag-validation-msg').classList.add('hidden');
+
+            const spotId = parseInt(document.getElementById('booking-spot').value || '1', 10);
+            const spot = spotsData.find(s => s.id === spotId) || spotsData[0];
+            const name = document.getElementById('guest-name').value.trim();
+            const time = document.getElementById('dropoff-time').value;
+            const total = smallCount * 5000 + largeCount * 8000;
+            const randomCode = `BH-${Math.floor(1000 + Math.random() * 9000)}`;
+            latestPassData = { spotId: spot.id, code: randomCode };
+
+            const dict = translations[currentLang] || translations.en;
+            const passMap = document.getElementById('underground-map-pass');
+            const passBtnSpan = document.querySelector('#toggle-map-btn-pass span');
+            if (passMap) passMap.classList.add('hidden');
+            if (passBtnSpan) passBtnSpan.textContent = dict.btn_view_map;
+
+            document.getElementById('pass-code').textContent = randomCode;
+            document.getElementById('pass-summary').textContent =
+                `${name} · ${spot.name} (${time}) · Small ${smallCount}, Suitcase ${largeCount} · ₩${total.toLocaleString()}`;
+
+            const qrContainer = document.getElementById('pass-qr-container');
+            qrContainer.innerHTML = '';
+            const qrPayload = `BAGHUG|CODE:${randomCode}|SPOT:${spot.id}|TIME:${time}|SMALL:${smallCount}|SUITCASE:${largeCount}|TOTAL:${total}|NAME:${name}`;
+
+            try {
+                if (typeof QRCode !== 'undefined') {
+                    new QRCode(qrContainer, {
+                        text: qrPayload,
+                        width: 144,
+                        height: 144,
+                        colorDark: '#111827',
+                        colorLight: '#ffffff',
+                        correctLevel: QRCode.CorrectLevel.M
+                    });
+                } else {
+                    qrContainer.innerHTML = `<div class="text-xs font-bold text-gray-500 p-4">${randomCode}</div>`;
+                }
+            } catch (err) {
+                qrContainer.innerHTML = `<div class="text-xs font-bold text-gray-500 p-4">${randomCode}</div>`;
+            }
+
+            document.getElementById('booking-form-view').classList.add('hidden');
+            document.getElementById('booking-success-view').classList.remove('hidden');
+        }
+
+        function downloadQrPass() {
+            const qrContainer = document.getElementById('pass-qr-container');
+            const passCode = document.getElementById('pass-code').textContent || 'BH-PASS';
+            const canvas = qrContainer.querySelector('canvas');
+            const img = qrContainer.querySelector('img');
+
+            let dataUrl = '';
+            if (canvas) {
+                dataUrl = canvas.toDataURL('image/png');
+            } else if (img && img.src) {
+                dataUrl = img.src;
+            }
+
+            if (!dataUrl) return;
+
+            const link = document.createElement('a');
+            link.href = dataUrl;
+            link.download = `Baghug-Pass-${passCode}.png`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        document.getElementById('booking-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeBookingModal();
+        });
+
+        document.getElementById('spots-modal').addEventListener('click', function(e) {
+            if (e.target === this) closeSpotsModal();
+        });
+
+        window.addEventListener('DOMContentLoaded', () => {
+            const browserLang = (navigator.language || 'en').toLowerCase();
+            if (browserLang.startsWith('ja')) setLang('jp');
+            else if (browserLang.startsWith('zh')) setLang('cn');
+            else if (browserLang.startsWith('ko')) setLang('kr');
+            else setLang('en');
+        });
+    </script>
+</body>
+</html>
